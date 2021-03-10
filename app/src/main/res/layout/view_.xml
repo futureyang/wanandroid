@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.future.wanandroid.view.AnimLogoView
+        android:id="@+id/anim_logo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:autoPlay="false"
+        app:gradientAnimDuration="2000"
+        app:gradientColor="@color/colorAccent"
+        app:logoName="ShangBiao"
+        app:offsetAnimDuration="2000"
+        app:showGradient="true"
+        app:textColor="@color/colorBadge"
+        app:textPadding="2dp"
+        app:textSize="30sp"
+        app:verticalOffset="50dp" />
+
+</FrameLayout>
