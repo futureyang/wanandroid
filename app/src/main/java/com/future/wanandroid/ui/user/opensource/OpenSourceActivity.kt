@@ -4,13 +4,13 @@ import android.os.Bundle
 import com.future.mvvmk.base.BaseActivity
 import com.future.wanandroid.R
 import com.future.wanandroid.bean.Article
+import com.future.wanandroid.databinding.ActivityOpenSourceBinding
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.details.DetailActivity
 import com.future.wanandroid.ui.details.DetailActivity.Companion.PARAM_ARTICLE
-import kotlinx.android.synthetic.main.activity_open_source.*
 import kotlinx.android.synthetic.main.include_title.*
 
-class OpenSourceActivity : BaseActivity() {
+class OpenSourceActivity : BaseActivity<ActivityOpenSourceBinding>() {
 
     private val openSourceData = listOf(
         Article(
@@ -65,7 +65,7 @@ class OpenSourceActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         OpenSourceAdapter().apply {
-            bindToRecyclerView(recyclerView)
+            bindToRecyclerView(mBinding.recyclerView)
             setNewData(openSourceData)
             setOnItemClickListener { _, _, position ->
                 val article = data[position]

@@ -1,4 +1,4 @@
-package com.xiaojianjun.wanandroid.model.store
+package com.future.wanandroid.store
 
 import com.future.wanandroid.MyApplication
 import com.future.wanandroid.bean.UserInfo

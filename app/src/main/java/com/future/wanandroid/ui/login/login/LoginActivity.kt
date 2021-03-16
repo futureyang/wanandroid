@@ -6,20 +6,20 @@ import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmActivity
 import com.future.toolkit.utils.ToastUtils
 import com.future.wanandroid.R
+import com.future.wanandroid.databinding.ActivityLoginBinding
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.login.register.RegisterActivity
-import com.future.wanandroid.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**
  * Created by yangqc on 2020/12/18
- *
+ * 登录
  */
 @AndroidEntryPoint
-class LoginActivity : BaseVmActivity<LoginViewModel>() {
+class LoginActivity : BaseVmActivity<LoginViewModel, ActivityLoginBinding>() {
 
-    private var isCipher = true
+    private var isCipher = true //显示密码
 
     override fun viewModelClass() = LoginViewModel::class.java
 
@@ -35,18 +35,20 @@ class LoginActivity : BaseVmActivity<LoginViewModel>() {
                 }
             }
         }
-        btnLogin.setOnClickListener {
-            val account = layout_login_account.contentText
-            val password = layout_login_password.contentText
-            when {
-                account.isEmpty() -> ToastUtils.show(this, R.string.account_can_not_be_empty)
-                password.isEmpty() -> ToastUtils.show(this, R.string.password_can_not_be_empty)
-                else -> mViewModel.login(account, password)
-            }
+    }
+
+    fun login() {
+        val account = layout_login_account.contentText
+        val password = layout_login_password.contentText
+        when {
+            account.isEmpty() -> ToastUtils.show(this, R.string.account_can_not_be_empty)
+            password.isEmpty() -> ToastUtils.show(this, R.string.password_can_not_be_empty)
+            else -> mViewModel.login(account, password)
         }
-        tv_login_registered.setOnClickListener {
-            ActivityManager.start(RegisterActivity::class.java)
-        }
+    }
+
+    fun register() {
+        ActivityManager.start(RegisterActivity::class.java)
     }
 
     override fun observe() {

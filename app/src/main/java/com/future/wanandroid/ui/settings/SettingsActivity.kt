@@ -10,73 +10,65 @@ import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmActivity
 import com.future.wanandroid.BuildConfig
 import com.future.wanandroid.R
+import com.future.wanandroid.bean.Article
 import com.future.wanandroid.common.SeekBarChangeListenerAdapter
+import com.future.wanandroid.databinding.ActivitySettingsBinding
 import com.future.wanandroid.ext.setNavigationBarColor
 import com.future.wanandroid.ext.showToast
 import com.future.wanandroid.ui.ActivityManager
+import com.future.wanandroid.ui.details.DetailActivity
+import com.future.wanandroid.ui.details.DetailActivity.Companion.PARAM_ARTICLE
 import com.future.wanandroid.ui.login.login.LoginActivity
 import com.future.wanandroid.util.clearCache
 import com.future.wanandroid.util.getCacheSize
 import com.future.wanandroid.util.isNightMode
 import com.future.wanandroid.util.setNightMode
-import com.xiaojianjun.wanandroid.model.store.SettingsStore
-import com.xiaojianjun.wanandroid.ui.settings.SettingsViewModel
+import com.future.wanandroid.store.SettingsStore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_settings.*
 import kotlinx.android.synthetic.main.view_change_text_zoom.*
 
 @SuppressLint("SetTextI18n")
 @AndroidEntryPoint
-class SettingsActivity : BaseVmActivity<SettingsViewModel>() {
+class SettingsActivity : BaseVmActivity<SettingsViewModel, ActivitySettingsBinding>() {
 
     override fun getLayoutId() = R.layout.activity_settings
 
     override fun viewModelClass() = SettingsViewModel::class.java
 
     override fun initView(savedInstanceState: Bundle?) {
+        mBinding.activity = this
+        mBinding.viewModel = mViewModel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             setNavigationBarColor(getColor(R.color.bgColorSecondary))
         }
-        scDayNight.isChecked = isNightMode(this)
-        tvFontSize.text = "${SettingsStore.getWebTextZoom()}%"
-        tvClearCache.text = getCacheSize(this)
-        tvAboutUs.text = getString(R.string.current_version, BuildConfig.VERSION_NAME)
-
         ivBack.setOnClickListener { ActivityManager.finish(SettingsActivity::class.java) }
-        scDayNight.setOnCheckedChangeListener { _, checked ->
+        mBinding.scDayNight.setOnCheckedChangeListener { _, checked ->
             setNightMode(checked)
             SettingsStore.setNightMode(checked)
         }
-        llFontSize.setOnClickListener {
-            setFontSize()
-        }
-        llClearCache.setOnClickListener {
+        mBinding.llClearCache.setOnClickListener {
             AlertDialog.Builder(this)
                 .setMessage(R.string.confirm_clear_cache)
                 .setPositiveButton(R.string.confirm) { _, _ ->
                     clearCache(this)
                     tvClearCache.text = getCacheSize(this)
-
                 }
                 .setNegativeButton(R.string.cancel) { _, _ -> }
                 .show()
         }
-        llCheckVersion.setOnClickListener {
-            // TODO 检查版本
-            showToast(getString(R.string.already_latest_version))
+        mBinding.llAboutUs.setOnClickListener {
+            ActivityManager.start(
+                DetailActivity::class.java,
+                mapOf(
+                    PARAM_ARTICLE to Article(
+                        title = getString(R.string.abount_us),
+                        link = "https://github.com/futureyang/wanandroid"
+                    )
+                )
+            )
         }
-//        llAboutUs.setOnClickListener {
-//            ActivityManager.start(
-//                DetailActivity::class.java,
-//                mapOf(
-//                    PARAM_ARTICLE to Article(
-//                        title = getString(R.string.abount_us),
-//                        link = "https://github.com/xiaoyanger0825/wanandroid"
-//                    )
-//                )
-//            )
-//        }
-        tvLogout.setOnClickListener {
+        mBinding.tvLogout.setOnClickListener {
             AlertDialog.Builder(this)
                 .setMessage(R.string.confirm_logout)
                 .setPositiveButton(R.string.confirm) { _, _ ->
@@ -89,8 +81,18 @@ class SettingsActivity : BaseVmActivity<SettingsViewModel>() {
         }
     }
 
+    fun isNightMode() = isNightMode(this)
+
+    fun getCacheSize() = getCacheSize(this)
+
+    fun fontSize() = "${SettingsStore.getWebTextZoom()}%"
+
+    fun aboutUs() = getString(R.string.current_version, BuildConfig.VERSION_NAME)
+
+    fun showToast() = showToast(getString(R.string.already_latest_version))
+
     @SuppressLint("SetTextI18n")
-    private fun setFontSize() {
+    fun setFontSize() {
         val textZoom = SettingsStore.getWebTextZoom()
         var tempTextZoom = textZoom
         AlertDialog.Builder(this)
@@ -111,16 +113,9 @@ class SettingsActivity : BaseVmActivity<SettingsViewModel>() {
                 SettingsStore.setWebTextZoom(tempTextZoom)
             }
             .show()
-
     }
 
     override fun initData() {
         mViewModel.getLoginStatus()
-    }
-
-    override fun observe() {
-        mViewModel.isLogin.observe(this, Observer {
-            tvLogout.isVisible = it
-        })
     }
 }

@@ -2,7 +2,7 @@ package com.future.wanandroid.ui.login
 
 import com.future.wanandroid.bean.UserInfo
 import com.future.wanandroid.network.ApiTool
-import com.xiaojianjun.wanandroid.model.store.UserInfoStore
+import com.future.wanandroid.store.UserInfoStore
 
 open class UserRepository {
 

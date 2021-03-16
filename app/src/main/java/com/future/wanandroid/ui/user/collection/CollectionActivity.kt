@@ -1,7 +1,6 @@
 package com.future.wanandroid.ui.user.collection
 
 import android.os.Bundle
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmActivity
 import com.future.wanandroid.R
@@ -12,18 +11,17 @@ import com.future.wanandroid.ui.details.DetailActivity
 import com.future.wanandroid.ui.main.adapter.ArticleAdapter
 import com.future.wanandroid.common.loadmore.CommonLoadMoreView
 import com.future.wanandroid.common.loadmore.LoadMoreStatus
+import com.future.wanandroid.databinding.ActivityCollectionBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_collection.*
 import kotlinx.android.synthetic.main.include_reload.*
 import kotlinx.android.synthetic.main.include_title.*
-import kotlinx.android.synthetic.main.include_title.ivBack
 
 /**
  * Created by yangqc on 2021/1/14
- *
+ * 我的收藏
  */
 @AndroidEntryPoint
-class CollectionActivity : BaseVmActivity<CollectionViewModel>() {
+class CollectionActivity : BaseVmActivity<CollectionViewModel, ActivityCollectionBinding>() {
 
 
     private lateinit var mAdapter: ArticleAdapter
@@ -33,9 +31,10 @@ class CollectionActivity : BaseVmActivity<CollectionViewModel>() {
     override fun getLayoutId() = R.layout.activity_collection
 
     override fun initView(savedInstanceState: Bundle?) {
+        mBinding.resId = R.color.textColorPrimary
         mAdapter = ArticleAdapter().apply {
             setLoadMoreView(CommonLoadMoreView())
-            bindToRecyclerView(recyclerView)
+            bindToRecyclerView(mBinding.recyclerView)
             setOnItemClickListener { _, _, position ->
                 val article = data[position]
                 ActivityManager.start(
@@ -49,12 +48,7 @@ class CollectionActivity : BaseVmActivity<CollectionViewModel>() {
                     removeItem(position)
                 }
             }
-            setOnLoadMoreListener({ mViewModel.loadMore() }, recyclerView)
-        }
-        swipeRefreshLayout.run {
-            setColorSchemeResources(R.color.textColorPrimary)
-            setProgressBackgroundColorSchemeResource(R.color.bgColorPrimary)
-            setOnRefreshListener { mViewModel.refresh() }
+            setOnLoadMoreListener({ mViewModel.loadMore() }, mBinding.recyclerView)
         }
         btnReload.setOnClickListener {
             mViewModel.refresh()
@@ -68,12 +62,10 @@ class CollectionActivity : BaseVmActivity<CollectionViewModel>() {
     }
 
     override fun observe() {
+        mBinding.viewModel = mViewModel
         mViewModel.run {
             articleList.observe(this@CollectionActivity, Observer {
                 mAdapter.setNewData(it)
-            })
-            refreshStatus.observe(this@CollectionActivity, Observer {
-                swipeRefreshLayout.isRefreshing = it
             })
             loadMoreStatus.observe(this@CollectionActivity, Observer {
                 when (it) {
@@ -82,12 +74,6 @@ class CollectionActivity : BaseVmActivity<CollectionViewModel>() {
                     LoadMoreStatus.END -> mAdapter.loadMoreEnd()
                     else -> return@Observer
                 }
-            })
-            reloadStatus.observe(this@CollectionActivity, Observer {
-                reloadView.isVisible = it
-            })
-            emptyStatus.observe(this@CollectionActivity, Observer {
-                emptyView.isVisible = it
             })
         }
         LiveBus.observe<Pair<Int, Boolean>>(USER_COLLECT_UPDATED, this) { (id, collect) ->
@@ -104,7 +90,7 @@ class CollectionActivity : BaseVmActivity<CollectionViewModel>() {
 
     private fun removeItem(position: Int) {
         mAdapter.remove(position)
-        emptyView.isVisible = mAdapter.data.isEmpty()
+        mViewModel.emptyStatus.value = mAdapter.data.isEmpty()
     }
 
 }

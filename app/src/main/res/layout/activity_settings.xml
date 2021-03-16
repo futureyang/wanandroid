@@ -1,18 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="activity"
+            type="com.future.wanandroid.ui.settings.SettingsActivity" />
+
+        <variable
+            name="viewModel"
+            type="com.future.wanandroid.ui.settings.SettingsViewModel" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".ui.settings.SettingsActivity">
 
-    <FrameLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/bgColorPrimary"
             android:elevation="2dp">
 
-        <ImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/ivBack"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -24,7 +39,7 @@
                 android:tint="@color/textColorPrimary" />
 
 
-        <TextView
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -32,19 +47,19 @@
                 android:text="@string/system_settings"
                 android:textColor="@color/textColorPrimary"
                 android:textSize="16sp" />
-    </FrameLayout>
+        </FrameLayout>
 
-    <ScrollView
+        <ScrollView
             android:layout_width="match_parent"
-            android:background="@color/bgColorSecondary"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/bgColorSecondary">
 
-        <LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-            <LinearLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -52,7 +67,7 @@
                     android:elevation="1dp"
                     android:orientation="vertical">
 
-                <LinearLayout
+                    <LinearLayout
                         android:id="@+id/llLightDark"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
@@ -61,65 +76,68 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp">
 
-                    <TextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/night_mode"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="14sp" />
 
-                    <Space
+                        <Space
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_weight="1" />
 
-                    <androidx.appcompat.widget.SwitchCompat
+                        <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/scDayNight"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-                </LinearLayout>
+                            android:layout_height="wrap_content"
+                            android:checked="@{activity.isNightMode()}" />
+                    </LinearLayout>
 
-                <View
+                    <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/bgColorSecondary" />
 
-                <LinearLayout
+                    <LinearLayout
                         android:id="@+id/llFontSize"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
                         android:background="@drawable/ripple_item_select"
                         android:gravity="center_vertical"
+                        android:onClick="@{() -> activity.setFontSize()}"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp">
 
-                    <TextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/font_size"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="14sp" />
 
-                    <Space
+                        <Space
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_weight="1" />
 
-                    <TextView
+                        <TextView
                             android:id="@+id/tvFontSize"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="6dp"
+                            android:text="@{activity.fontSize()}"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="13sp" />
-                </LinearLayout>
+                    </LinearLayout>
 
-                <View
+                    <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/bgColorSecondary" />
 
-                <LinearLayout
+                    <LinearLayout
                         android:id="@+id/llClearCache"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
@@ -128,30 +146,30 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp">
 
-                    <TextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/clear_cache"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="14sp" />
 
-                    <Space
+                        <Space
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_weight="1" />
 
-                    <TextView
+                        <TextView
                             android:id="@+id/tvClearCache"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="6dp"
-                            android:text="512MB"
+                            android:text="@{activity.getCacheSize()}"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="13sp" />
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <LinearLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -159,28 +177,29 @@
                     android:elevation="1dp"
                     android:orientation="vertical">
 
-                <LinearLayout
+                    <LinearLayout
                         android:id="@+id/llCheckVersion"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
                         android:background="@drawable/ripple_item_select"
                         android:gravity="center_vertical"
+                        android:onClick="@{() -> activity.showToast()}"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp">
 
-                    <TextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/check_version"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="14sp" />
 
-                    <Space
+                        <Space
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_weight="1" />
 
-                    <TextView
+                        <TextView
                             android:id="@+id/tvCheckVersion"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -189,14 +208,14 @@
                             android:textColor="@color/textColorPrimary"
                             android:textSize="13sp" />
 
-                </LinearLayout>
+                    </LinearLayout>
 
-                <View
+                    <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/bgColorSecondary" />
 
-                <LinearLayout
+                    <LinearLayout
                         android:id="@+id/llAboutUs"
                         android:layout_width="match_parent"
                         android:layout_height="42dp"
@@ -205,31 +224,32 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp">
 
-                    <TextView
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/abount_us"
                             android:textColor="@color/textColorPrimary"
                             android:textSize="14sp" />
 
-                    <Space
+                        <Space
                             android:layout_width="0dp"
                             android:layout_height="0dp"
                             android:layout_weight="1" />
 
-                    <TextView
+                        <TextView
                             android:id="@+id/tvAboutUs"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="6dp"
-                            android:text="当前版本1.0.0"
+                            android:text="@{activity.aboutUs()}"
                             android:textColor="@color/textColorPrimary"
-                            android:textSize="13sp" />
+                            android:textSize="13sp"
+                            tools:text="当前版本1.0.0" />
 
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
 
-            <TextView
+                <TextView
                     android:id="@+id/tvLogout"
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
@@ -241,8 +261,10 @@
                     android:gravity="center"
                     android:text="@string/logout"
                     android:textColor="@color/textColorPrimary"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:visibility="@{viewModel.isLogin()? View.VISIBLE : View.GONE}" />
 
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

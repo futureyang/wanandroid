@@ -1,68 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/colorWhite">
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/login_icon"
-        android:layout_marginTop="88dp"
-        app:srcCompat="@drawable/bg_splash"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <LinearLayout
-        android:id="@+id/layout_account_login_container"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="activity"
+            type="com.future.wanandroid.ui.login.login.LoginActivity" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="@dimen/dp_60"
-        android:layout_marginStart="@dimen/dp_50"
-        android:layout_marginEnd="@dimen/dp_50"
-        app:layout_constraintTop_toBottomOf="@id/login_icon"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-        <com.future.toolkit.widget.TemplateItemLayout
-            android:id="@+id/layout_login_account"
+        android:layout_height="match_parent"
+        android:background="@color/colorWhite">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/login_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="88dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bg_splash" />
+
+        <LinearLayout
+            android:id="@+id/layout_account_login_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cil_rightVisible="false"
-            app:cil_editable="true"
-            app:cil_hint="@string/hint_account"
-            app:cil_leftImageId="@drawable/ic_account"/>
-        <com.future.toolkit.widget.TemplateItemLayout
-            android:layout_marginTop="@dimen/dp_30"
-            android:id="@+id/layout_login_password"
-            android:layout_width="match_parent"
+            android:layout_marginStart="@dimen/dp_50"
+            android:layout_marginTop="@dimen/dp_60"
+            android:layout_marginEnd="@dimen/dp_50"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/login_icon">
+
+            <com.future.toolkit.widget.TemplateItemLayout
+                android:id="@+id/layout_login_account"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cil_editable="true"
+                app:cil_hint="@string/hint_account"
+                app:cil_leftImageId="@drawable/ic_account"
+                app:cil_rightVisible="false" />
+
+            <com.future.toolkit.widget.TemplateItemLayout
+                android:id="@+id/layout_login_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_30"
+                app:cil_editable="true"
+                app:cil_hint="@string/hint_password"
+                app:cil_inputCipher="true"
+                app:cil_leftImageId="@drawable/ic_password"
+                app:cil_rightImageId="@drawable/ic_visibility_off" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_to_registered"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:cil_rightImageId="@drawable/ic_visibility_off"
-            app:cil_editable="true"
-            app:cil_inputCipher="true"
-            app:cil_hint="@string/hint_password"
-            app:cil_leftImageId="@drawable/ic_password"/>
-    </LinearLayout>
-    <TextView
-        android:id="@+id/tv_login_registered"
-        android:text="@string/go_register"
-        android:textSize="@dimen/sp_12"
-        android:layout_marginTop="@dimen/dp_14"
-        android:layout_marginEnd="@dimen/dp_50"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layout_account_login_container"/>
-    <androidx.appcompat.widget.AppCompatButton
-        android:gravity="center"
-        android:id="@+id/btnLogin"
-        android:layout_width="match_parent"
-        android:layout_height="38dp"
-        android:layout_margin="@dimen/dp_50"
-        android:background="@drawable/shape_bg_btn"
-        android:text="@string/login"
-        android:textColor="@color/textColorPrimary"
-        android:textSize="@dimen/sp_14"
-        app:layout_constraintTop_toBottomOf="@id/layout_account_login_container"/>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginTop="@dimen/dp_14"
+            android:layout_marginEnd="@dimen/dp_50"
+            android:onClick="@{() -> activity.register()}"
+            android:text="@string/go_register"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_account_login_container" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:layout_margin="@dimen/dp_50"
+            android:background="@drawable/shape_bg_btn"
+            android:gravity="center"
+            android:onClick="@{() -> activity.login()}"
+            android:text="@string/login"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintTop_toBottomOf="@id/layout_account_login_container" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

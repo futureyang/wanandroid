@@ -1,4 +1,4 @@
-package com.xiaojianjun.wanandroid.ui.settings
+package com.future.wanandroid.ui.settings
 
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData

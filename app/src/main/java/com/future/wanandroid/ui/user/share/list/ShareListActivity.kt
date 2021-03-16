@@ -3,7 +3,6 @@ package com.future.wanandroid.ui.user.share.list
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmActivity
 import com.future.wanandroid.R
@@ -12,25 +11,23 @@ import com.future.wanandroid.common.bus.USER_COLLECT_UPDATED
 import com.future.wanandroid.common.bus.USER_LOGIN_STATE_CHANGED
 import com.future.wanandroid.common.loadmore.CommonLoadMoreView
 import com.future.wanandroid.common.loadmore.LoadMoreStatus
+import com.future.wanandroid.databinding.ActivityShareListBinding
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.details.DetailActivity
 import com.future.wanandroid.ui.main.adapter.ArticleAdapter
 import com.future.wanandroid.ui.user.share.ShareActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_share_list.emptyView
-import kotlinx.android.synthetic.main.activity_share_list.recyclerView
-import kotlinx.android.synthetic.main.activity_share_list.reloadView
-import kotlinx.android.synthetic.main.activity_share_list.swipeRefreshLayout
+
 import kotlinx.android.synthetic.main.include_reload.*
 import kotlinx.android.synthetic.main.include_title.*
 
 
 /**
  * Created by yangqc on 2021/2/3
- *
+ * 我的分享
  */
 @AndroidEntryPoint
-class ShareListActivity : BaseVmActivity<ShareListViewModel>() {
+class ShareListActivity : BaseVmActivity<ShareListViewModel, ActivityShareListBinding>() {
 
     lateinit var mAdapter : ArticleAdapter
 
@@ -40,11 +37,11 @@ class ShareListActivity : BaseVmActivity<ShareListViewModel>() {
 
     override fun getLayoutId() = R.layout.activity_share_list
 
-
     override fun initView(savedInstanceState: Bundle?) {
+        mBinding.resId = R.color.textColorPrimary
         mAdapter = ArticleAdapter().apply {
             setLoadMoreView(CommonLoadMoreView())
-            bindToRecyclerView(recyclerView)
+            bindToRecyclerView(mBinding.recyclerView)
             setOnItemClickListener { _, _, position ->
                 val article = data[position]
                 ActivityManager.start(
@@ -66,16 +63,11 @@ class ShareListActivity : BaseVmActivity<ShareListViewModel>() {
                     .setPositiveButton(R.string.confirm) { _, _ ->
                         mViewModel.deleteShared(data[position].id)
                         mAdapter.remove(position)
-                        this@ShareListActivity.emptyView.isVisible = data.isEmpty()
+                        mViewModel.emptyStatus.value = data.isEmpty()
                     }.show()
                 true
             }
-            setOnLoadMoreListener({ mViewModel.loadMore() }, recyclerView)
-        }
-        swipeRefreshLayout.run {
-            setColorSchemeResources(R.color.textColorPrimary)
-            setProgressBackgroundColorSchemeResource(R.color.bgColorPrimary)
-            setOnRefreshListener { mViewModel.loadMore() }
+            setOnLoadMoreListener({ mViewModel.loadMore() }, mBinding.recyclerView)
         }
         btnReload.setOnClickListener {
             mViewModel.refresh()
@@ -96,12 +88,10 @@ class ShareListActivity : BaseVmActivity<ShareListViewModel>() {
     }
 
     override fun observe() {
+        mBinding.viewModel = mViewModel
         mViewModel.run {
             articleList.observe(this@ShareListActivity, Observer {
                 mAdapter.setNewData(it)
-            })
-            refreshStatus.observe(this@ShareListActivity, Observer {
-                swipeRefreshLayout.isRefreshing = it
             })
             loadMoreStatus.observe(this@ShareListActivity, Observer {
                 when (it) {
@@ -110,12 +100,6 @@ class ShareListActivity : BaseVmActivity<ShareListViewModel>() {
                     LoadMoreStatus.END -> mAdapter.loadMoreEnd()
                     else -> return@Observer
                 }
-            })
-            reloadStatus.observe(this@ShareListActivity, Observer {
-                reloadView.isVisible = it
-            })
-            emptyStatus.observe(this@ShareListActivity, Observer {
-                emptyView.isVisible = it
             })
         }
         LiveBus.observe<Boolean>(USER_LOGIN_STATE_CHANGED, this) {

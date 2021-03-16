@@ -1,7 +1,7 @@
 package com.future.wanandroid.ui.search.history
 
 import com.future.wanandroid.network.ApiTool
-import com.xiaojianjun.wanandroid.model.store.SearchHistoryStore
+import com.future.wanandroid.store.SearchHistoryStore
 import javax.inject.Inject
 
 /**

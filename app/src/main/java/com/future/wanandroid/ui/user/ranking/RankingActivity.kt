@@ -1,25 +1,22 @@
 package com.future.wanandroid.ui.user.ranking
 
 import android.os.Bundle
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmActivity
 import com.future.wanandroid.R
-import com.future.wanandroid.ui.ActivityManager
-import com.future.wanandroid.ui.details.DetailActivity
 import com.future.wanandroid.common.loadmore.CommonLoadMoreView
 import com.future.wanandroid.common.loadmore.LoadMoreStatus
+import com.future.wanandroid.databinding.ActivityRankingBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_collection.*
 import kotlinx.android.synthetic.main.include_reload.*
 import kotlinx.android.synthetic.main.include_title.*
 
 /**
  * Created by yangqc on 2021/1/28
- *
+ * 积分排行
  */
 @AndroidEntryPoint
-class RankingActivity : BaseVmActivity<RankingViewModel>() {
+class RankingActivity : BaseVmActivity<RankingViewModel, ActivityRankingBinding>() {
 
     override fun viewModelClass() = RankingViewModel::class.java
 
@@ -28,15 +25,11 @@ class RankingActivity : BaseVmActivity<RankingViewModel>() {
     lateinit var mAdapter: RankingAdapter
 
     override fun initView(savedInstanceState: Bundle?) {
+        mBinding.resId = R.color.textColorPrimary
         mAdapter = RankingAdapter().apply {
             setLoadMoreView(CommonLoadMoreView())
-            bindToRecyclerView(recyclerView)
-            setOnLoadMoreListener({ mViewModel.loadMore() }, recyclerView)
-        }
-        swipeRefreshLayout.run {
-            setColorSchemeResources(R.color.textColorPrimary)
-            setProgressBackgroundColorSchemeResource(R.color.bgColorPrimary)
-            setOnRefreshListener { mViewModel.refresh() }
+            bindToRecyclerView(mBinding.recyclerView)
+            setOnLoadMoreListener({ mViewModel.loadMore() }, mBinding.recyclerView)
         }
         btnReload.setOnClickListener {
             mViewModel.refresh()
@@ -50,12 +43,10 @@ class RankingActivity : BaseVmActivity<RankingViewModel>() {
     }
 
     override fun observe() {
+        mBinding.viewModel = mViewModel
         mViewModel.run {
             rankingList.observe(this@RankingActivity, Observer {
                 mAdapter.setNewData(it)
-            })
-            refreshStatus.observe(this@RankingActivity, Observer {
-                swipeRefreshLayout.isRefreshing = it
             })
             loadMoreStatus.observe(this@RankingActivity, Observer {
                 when (it) {
@@ -64,9 +55,6 @@ class RankingActivity : BaseVmActivity<RankingViewModel>() {
                     LoadMoreStatus.END -> mAdapter.loadMoreEnd()
                     else -> return@Observer
                 }
-            })
-            reloadStatus.observe(this@RankingActivity, Observer {
-                reloadView.isVisible = it
             })
         }
     }

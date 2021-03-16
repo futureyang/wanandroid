@@ -5,7 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.future.wanandroid.R
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.util.setNightMode
-import com.xiaojianjun.wanandroid.model.store.SettingsStore
+import com.future.wanandroid.store.SettingsStore
 import java.lang.Thread.sleep
 
 /**

@@ -6,18 +6,18 @@ import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmActivity
 import com.future.toolkit.utils.ToastUtils
 import com.future.wanandroid.R
+import com.future.wanandroid.databinding.ActivityRegisterBinding
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.login.login.LoginActivity
-import com.future.wanandroid.ui.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_register.*
 
 /**
  * Created by yangqc on 2020/12/18
- *
+ * 注册
  */
 @AndroidEntryPoint
-class RegisterActivity : BaseVmActivity<RegisterViewModel>() {
+class RegisterActivity : BaseVmActivity<RegisterViewModel, ActivityRegisterBinding>() {
 
     private var isCipher = true
 
@@ -46,27 +46,27 @@ class RegisterActivity : BaseVmActivity<RegisterViewModel>() {
                 }
             }
         }
-        btnRegister.setOnClickListener {
-            val account = layout_register_account.contentText
-            val password = layout_register_password.contentText
-            val confirmPassword = layout_register_password_confirm.contentText
-            when {
-                account.isEmpty() -> ToastUtils.show(this, R.string.account_can_not_be_empty)
-                account.length < 3 -> ToastUtils.show(this, R.string.account_length_over_three)
-                password.isEmpty() -> ToastUtils.show(this, R.string.password_can_not_be_empty)
-                password.length < 6 -> ToastUtils.show(this, R.string.password_length_over_six)
-                confirmPassword.isEmpty() -> ToastUtils.show(
-                    this,
-                    R.string.confirm_password_can_not_be_empty
-                )
-                confirmPassword != password -> ToastUtils.show(
-                    this,
-                    R.string.two_password_are_inconsistent
-                )
-                else -> mViewModel.register(account, password, confirmPassword)
-            }
+    }
+
+    fun register() {
+        val account = layout_register_account.contentText
+        val password = layout_register_password.contentText
+        val confirmPassword = layout_register_password_confirm.contentText
+        when {
+            account.isEmpty() -> ToastUtils.show(this, R.string.account_can_not_be_empty)
+            account.length < 3 -> ToastUtils.show(this, R.string.account_length_over_three)
+            password.isEmpty() -> ToastUtils.show(this, R.string.password_can_not_be_empty)
+            password.length < 6 -> ToastUtils.show(this, R.string.password_length_over_six)
+            confirmPassword.isEmpty() -> ToastUtils.show(
+                this,
+                R.string.confirm_password_can_not_be_empty
+            )
+            confirmPassword != password -> ToastUtils.show(
+                this,
+                R.string.two_password_are_inconsistent
+            )
+            else -> mViewModel.register(account, password, confirmPassword)
         }
-        ivBack.setOnClickListener { finish() }
     }
 
     override fun observe() {

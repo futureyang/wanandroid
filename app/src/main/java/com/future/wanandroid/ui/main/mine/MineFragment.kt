@@ -83,7 +83,7 @@ class MineFragment : BaseVmFragment<MineViewModle>() {
 //                }
 //                cursor.close()
 //            }
-            image()
+            checkLogin { image() }
         }
 
     }

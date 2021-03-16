@@ -4,9 +4,15 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import com.future.wanandroid.R
+import com.future.wanandroid.ext.showToast
 import com.future.wanandroid.util.showProgress
 
-abstract class BaseActivity : AppCompatActivity() {
+abstract class BaseActivity<VB: ViewDataBinding> : AppCompatActivity() {
+
+    lateinit var mBinding: VB
 
     private var mProgressDialog: Dialog? = null
 
@@ -15,7 +21,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(getLayoutId())
+        initViewDataBinding()
         initView(savedInstanceState)
         observe()
         // 因为Activity恢复后savedInstanceState不为null，
@@ -29,6 +35,11 @@ abstract class BaseActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         dismissDialog()
+    }
+
+    private fun initViewDataBinding() {
+        mBinding = DataBindingUtil.setContentView(this, getLayoutId()) as VB
+        mBinding.lifecycleOwner = this
     }
 
     open fun initView(savedInstanceState: Bundle?) {}
@@ -46,4 +57,5 @@ abstract class BaseActivity : AppCompatActivity() {
         mProgressDialog?.dismiss()
         mProgressDialog = null
     }
+
 }

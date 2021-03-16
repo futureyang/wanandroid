@@ -6,6 +6,7 @@ import androidx.core.view.isGone
 import androidx.core.widget.addTextChangedListener
 import com.future.mvvmk.base.BaseActivity
 import com.future.wanandroid.R
+import com.future.wanandroid.databinding.ActivitySearchBinding
 import com.future.wanandroid.ext.hideSoftInput
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.search.history.SearchHistoryFragment
@@ -18,7 +19,7 @@ import kotlinx.android.synthetic.main.activity_search.*
  *
  */
 @AndroidEntryPoint
-class SearchActivity : BaseActivity() {
+class SearchActivity : BaseActivity<ActivitySearchBinding>() {
 
     override fun getLayoutId() = R.layout.activity_search
 

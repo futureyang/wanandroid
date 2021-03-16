@@ -1,8 +1,6 @@
 package com.future.wanandroid.ui.details
 
-import android.annotation.SuppressLint
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
@@ -10,7 +8,6 @@ import android.view.ViewGroup
 import android.webkit.ConsoleMessage
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmActivity
 import com.future.wanandroid.R
@@ -18,16 +15,16 @@ import com.future.wanandroid.bean.Article
 import com.future.wanandroid.common.bus.LiveBus
 import com.future.wanandroid.common.bus.USER_COLLECT_UPDATED
 import com.future.wanandroid.common.bus.USER_LOGIN_STATE_CHANGED
+import com.future.wanandroid.databinding.ActivityDetailBinding
 import com.future.wanandroid.ext.htmlToSpanned
 import com.future.wanandroid.ext.setBrightness
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.util.isNightMode
-import com.future.wanandroid.util.whiteHostList
 import com.just.agentweb.AgentWeb
 import com.just.agentweb.DefaultWebClient
 import com.just.agentweb.WebChromeClient
 import com.just.agentweb.WebViewClient
-import com.xiaojianjun.wanandroid.model.store.SettingsStore
+import com.future.wanandroid.store.SettingsStore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_detail.*
 
@@ -36,7 +33,7 @@ import kotlinx.android.synthetic.main.activity_detail.*
  *
  */
 @AndroidEntryPoint
-class DetailActivity : BaseVmActivity<DetailViewModel>() {
+class DetailActivity : BaseVmActivity<DetailViewModel, ActivityDetailBinding>() {
 
     companion object {
         const val PARAM_ARTICLE = "param_article"

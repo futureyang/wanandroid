@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.future.mvvmk.base.BaseActivity
 import com.future.wanandroid.R
 import com.future.wanandroid.common.ScrollToTop
+import com.future.wanandroid.databinding.ActivityMainBinding
 import com.future.wanandroid.ext.showToast
 import com.future.wanandroid.ui.main.hierarchy.HierarchyFragment
 import com.future.wanandroid.ui.main.home.HomeFragment
@@ -18,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity<ActivityMainBinding>() {
 
     private var previousTimeMillis = 0L
 

@@ -2,7 +2,6 @@ package com.future.wanandroid.ui.user.history
 
 import android.os.Bundle
 import androidx.appcompat.app.AlertDialog
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmActivity
 import com.future.wanandroid.R
@@ -13,16 +12,16 @@ import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.details.DetailActivity
 import com.future.wanandroid.ui.main.adapter.ArticleAdapter
 import com.future.wanandroid.common.loadmore.CommonLoadMoreView
+import com.future.wanandroid.databinding.ActivityHistoryBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.activity_history.*
 import kotlinx.android.synthetic.main.include_title.*
 
 /**
  * Created by yangqc on 2021/1/18
- *
+ * 浏览历史
  */
 @AndroidEntryPoint
-class HistoryActivity : BaseVmActivity<HistoryViewModel>() {
+class HistoryActivity : BaseVmActivity<HistoryViewModel, ActivityHistoryBinding>() {
 
     private var position = 0
 
@@ -35,7 +34,7 @@ class HistoryActivity : BaseVmActivity<HistoryViewModel>() {
     override fun initView(savedInstanceState: Bundle?) {
         mAdapter = ArticleAdapter().apply {
             setLoadMoreView(CommonLoadMoreView())
-            bindToRecyclerView(recyclerView)
+            bindToRecyclerView(mBinding.recyclerView)
             setOnItemClickListener { _, _, position ->
                 val article = mAdapter.data[position]
                 ActivityManager.start(
@@ -58,7 +57,7 @@ class HistoryActivity : BaseVmActivity<HistoryViewModel>() {
                     .setPositiveButton(R.string.confirm) { _, _ ->
                         mViewModel.deleteHistory(data[position])
                         mAdapter.remove(position)
-                        this@HistoryActivity.emptyView.isVisible = data.isEmpty()
+                        mViewModel.emptyStatus.value = data.isEmpty()
                     }.show()
                 true
             }
@@ -73,12 +72,10 @@ class HistoryActivity : BaseVmActivity<HistoryViewModel>() {
     }
 
     override fun observe() {
+        mBinding.viewModel = mViewModel
         mViewModel.run {
             articleList.observe(this@HistoryActivity, Observer {
                 mAdapter.setNewData(it)
-            })
-            emptyStatus.observe(this@HistoryActivity, Observer {
-                emptyView.isVisible = it
             })
         }
         LiveBus.observe<Boolean>(USER_LOGIN_STATE_CHANGED, this) {

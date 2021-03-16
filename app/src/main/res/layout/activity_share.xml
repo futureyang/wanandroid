@@ -1,22 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.future.wanandroid.ui.user.share.ShareViewModel" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-    <include layout="@layout/include_title"/>
+        <include layout="@layout/include_title" />
 
-    <ScrollView
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/bgColorPrimary">
 
-        <LinearLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-            <TextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -26,7 +34,7 @@
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/acetTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -43,7 +51,7 @@
                     android:textColorHint="@color/textColorThird"
                     android:textSize="14sp" />
 
-            <TextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -53,7 +61,7 @@
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/acetlink"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -70,7 +78,7 @@
                     android:textColorHint="@color/textColorThird"
                     android:textSize="14sp" />
 
-            <TextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -80,7 +88,7 @@
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp" />
 
-            <androidx.appcompat.widget.AppCompatEditText
+                <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/acetSharePeople"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -91,11 +99,12 @@
                     android:lines="1"
                     android:maxLines="1"
                     android:padding="8dp"
+                    android:text="@{viewModel.userInfo.nickname ?? viewModel.userInfo.username}"
                     android:textColor="@color/textColorPrimary"
                     android:textColorHint="@color/textColorThird"
                     android:textSize="14sp" />
 
-            <TextView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
@@ -105,7 +114,7 @@
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp" />
 
-            <TextView
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -113,6 +122,7 @@
                     android:text="@string/tips_content"
                     android:textColor="@color/textColorPrimary"
                     android:textSize="13sp" />
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>
