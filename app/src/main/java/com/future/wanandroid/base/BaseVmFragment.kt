@@ -1,11 +1,12 @@
 package com.future.mvvmk.base
 
+import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.ViewModelProvider
 import com.future.wanandroid.base.BaseFragment
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.login.login.LoginActivity
 
-abstract class BaseVmFragment<VM : BaseViewModel> : BaseFragment() {
+abstract class BaseVmFragment<VM : BaseViewModel, VB: ViewDataBinding> : BaseFragment<VB>() {
 
     val mViewModel: VM by lazy { ViewModelProvider(this).get(viewModelClass()) }
 

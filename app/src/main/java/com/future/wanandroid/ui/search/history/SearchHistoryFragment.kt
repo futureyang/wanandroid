@@ -2,16 +2,15 @@ package com.future.wanandroid.ui.search.history
 
 import android.view.LayoutInflater
 import android.view.View
-import androidx.core.view.isGone
 import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmFragment
 import com.future.wanandroid.R
 import com.future.wanandroid.bean.HotWord
+import com.future.wanandroid.databinding.FragmentSearchHistoryBinding
 import com.future.wanandroid.ui.search.SearchActivity
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_search_history.*
 import kotlinx.android.synthetic.main.item_hot_search.view.*
 
 /**
@@ -19,7 +18,7 @@ import kotlinx.android.synthetic.main.item_hot_search.view.*
  * 搜索历史
  */
 @AndroidEntryPoint
-class SearchHistoryFragment : BaseVmFragment<SearchHistoryViewModel>() {
+class SearchHistoryFragment : BaseVmFragment<SearchHistoryViewModel, FragmentSearchHistoryBinding>() {
 
     companion object {
         fun newInstance() = SearchHistoryFragment()
@@ -33,7 +32,7 @@ class SearchHistoryFragment : BaseVmFragment<SearchHistoryViewModel>() {
 
     override fun initView() {
         mAdapter = SearchHistoryAdapter(activity!!).apply {
-            rvSearchHistory.adapter = this
+            mBinding.recyclerView.adapter = this
             onItemClickListener = {
                 (activity as? SearchActivity)?.fillSearchInput(data[it])
             }
@@ -49,20 +48,19 @@ class SearchHistoryFragment : BaseVmFragment<SearchHistoryViewModel>() {
     }
 
     override fun observe() {
+        mBinding.viewModel = mViewModel
         mViewModel.run {
             hotWords.observe(viewLifecycleOwner, Observer {
-                tvHotSearch.visibility = View.VISIBLE
                 setHotwords(it)
             })
             searchHistory.observe(viewLifecycleOwner, Observer {
-                tvSearchHistory.isGone = it.isEmpty()
                 mAdapter.submitList(it)
             })
         }
     }
 
     private fun setHotwords(hotwords: List<HotWord>) {
-        tflHotSearch.run {
+        mBinding.tflHotSearch.run {
             adapter = object : TagAdapter<HotWord>(hotwords) {
                 override fun getView(parent: FlowLayout?, position: Int, hotWord: HotWord?): View {
                     return LayoutInflater.from(parent?.context)

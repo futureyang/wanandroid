@@ -25,7 +25,7 @@ class QuestionsViewModel @ViewModelInject constructor(
     val refreshStatus = MutableLiveData<Boolean>() //正在刷新
     val reloadStatus = MutableLiveData<Boolean>() //
 
-    fun refreshArticleList() {
+    fun refresh() {
         refreshStatus.value = true
         reloadStatus.value = false
         launch(
@@ -42,7 +42,7 @@ class QuestionsViewModel @ViewModelInject constructor(
         )
     }
 
-    fun loadMoreArticleList() {
+    fun loadMore() {
         launch({
             val articleData = questionsRepository.getQuestionsList(page)
             page = articleData.curPage

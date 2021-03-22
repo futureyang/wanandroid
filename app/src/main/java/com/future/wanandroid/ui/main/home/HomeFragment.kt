@@ -6,6 +6,7 @@ import com.future.wanandroid.R
 import com.future.wanandroid.base.BaseFragment
 import com.future.wanandroid.common.ScrollToTop
 import com.future.wanandroid.common.SimpleFragmentPagerAdapter
+import com.future.wanandroid.databinding.FragmentHomeBinding
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.main.MainActivity
 import com.future.wanandroid.ui.main.home.latest.LatestFragment
@@ -18,7 +19,7 @@ import com.future.wanandroid.ui.search.SearchActivity
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : BaseFragment(), ScrollToTop {
+class HomeFragment : BaseFragment<FragmentHomeBinding>(), ScrollToTop {
 
     private lateinit var fragments: List<Fragment>
 

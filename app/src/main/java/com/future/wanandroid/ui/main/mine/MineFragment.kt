@@ -1,17 +1,13 @@
 package com.future.wanandroid.ui.main.mine
 
-import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.Intent
-import android.provider.MediaStore
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmFragment
 import com.future.wanandroid.R
 import com.future.wanandroid.bean.Article
 import com.future.wanandroid.common.bus.LiveBus
 import com.future.wanandroid.common.bus.USER_LOGIN_STATE_CHANGED
+import com.future.wanandroid.databinding.FragmentMineBinding
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.details.DetailActivity
 import com.future.wanandroid.ui.details.DetailActivity.Companion.PARAM_ARTICLE
@@ -25,7 +21,7 @@ import com.future.wanandroid.ui.user.ranking.RankingActivity
 import com.future.wanandroid.ui.user.share.list.ShareListActivity
 import kotlinx.android.synthetic.main.fragment_mine.*
 
-class MineFragment : BaseVmFragment<MineViewModle>() {
+class MineFragment : BaseVmFragment<MineViewModle, FragmentMineBinding>() {
 
     companion object {
         fun newInstance() = MineFragment()
@@ -36,25 +32,25 @@ class MineFragment : BaseVmFragment<MineViewModle>() {
     override fun getLayoutId() = R.layout.fragment_mine
 
     override fun initView() {
-        llMyPoints.setOnClickListener {
+        mBinding.llMyPoints.setOnClickListener {
             checkLogin { ActivityManager.start(IntegralActivity::class.java) }
         }
-        llRanking.setOnClickListener {
+        mBinding.llRanking.setOnClickListener {
             ActivityManager.start(RankingActivity::class.java)
         }
-        llMyShare.setOnClickListener {
+        mBinding.llMyShare.setOnClickListener {
             checkLogin { ActivityManager.start(ShareListActivity::class.java) }
         }
-        llMyCollect.setOnClickListener {
+        mBinding.llMyCollect.setOnClickListener {
             checkLogin { ActivityManager.start(CollectionActivity::class.java) }
         }
-        llHistory.setOnClickListener {
+        mBinding.llHistory.setOnClickListener {
             ActivityManager.start(HistoryActivity::class.java)
         }
-        llOpenSource.setOnClickListener {
+        mBinding.llOpenSource.setOnClickListener {
             ActivityManager.start(OpenSourceActivity::class.java)
         }
-        llAboutAuthor.setOnClickListener {
+        mBinding.llAboutAuthor.setOnClickListener {
             ActivityManager.start(
                 DetailActivity::class.java,
                 mapOf(
@@ -65,13 +61,13 @@ class MineFragment : BaseVmFragment<MineViewModle>() {
                 )
             )
         }
-        llSetting.setOnClickListener {
+        mBinding.llSetting.setOnClickListener {
             ActivityManager.start(SettingsActivity::class.java)
         }
-        ll_to_login.setOnClickListener {
+        mBinding.llToLogin.setOnClickListener {
             ActivityManager.start(LoginActivity::class.java)
         }
-        iv_user_photo.setOnClickListener {
+        mBinding.ivPhoto.setOnClickListener {
 //            val cursor = context!!.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null, null, "${MediaStore.MediaColumns.DATE_ADDED} desc")
 //            if (cursor != null) {
 //                while (cursor.moveToNext()) {
@@ -93,12 +89,8 @@ class MineFragment : BaseVmFragment<MineViewModle>() {
     }
 
     override fun observe() {
+        mBinding.viewModel = mViewModel
         mViewModel.run {
-            isLogin.observe(viewLifecycleOwner, Observer {
-                tv_login_registered.isGone = it
-                tv_user_name.isVisible = it
-                ll_to_login.isClickable = !it
-            })
             userInfo.observe(viewLifecycleOwner, Observer {
                 it?.let {
                     tv_user_name.text = it.nickname

@@ -1,13 +1,12 @@
 package com.future.wanandroid.ui.main.navigation
 
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.future.mvvmk.base.BaseVmFragment
 import com.future.wanandroid.R
 import com.future.wanandroid.bean.Article
 import com.future.wanandroid.common.ScrollToTop
+import com.future.wanandroid.databinding.FragmentNavigationBinding
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.details.DetailActivity
 import com.future.wanandroid.ui.details.DetailActivity.Companion.PARAM_ARTICLE
@@ -17,12 +16,10 @@ import com.xiaojianjun.wanandroid.model.bean.Banner
 import com.youth.banner.BannerConfig
 import com.youth.banner.Transformer
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_navigation.*
-import kotlinx.android.synthetic.main.fragment_navigation.reloadView
-import kotlinx.android.synthetic.main.include_reload.*
+import kotlinx.android.synthetic.main.include_reload.view.*
 
 @AndroidEntryPoint
-class NavigationFragment : BaseVmFragment<NavigationViewModle>(), ScrollToTop {
+class NavigationFragment : BaseVmFragment<NavigationViewModle, FragmentNavigationBinding>(), ScrollToTop {
 
     companion object {
         fun newInstance() = NavigationFragment()
@@ -37,13 +34,9 @@ class NavigationFragment : BaseVmFragment<NavigationViewModle>(), ScrollToTop {
     override fun getLayoutId() = R.layout.fragment_navigation
 
     override fun initView() {
-        swipeRefreshLayout.run {
-            setColorSchemeResources(R.color.textColorPrimary)
-            setProgressBackgroundColorSchemeResource(R.color.bgColorPrimary)
-            setOnRefreshListener { mViewModel.getData() }
-        }
+        mBinding.resId = R.color.textColorPrimary
         mAdapter = NavigationAdapter(R.layout.item_navigation).apply {
-            bindToRecyclerView(recyclerView)
+            bindToRecyclerView(mBinding.recyclerView)
             onItemTagClickListener = {
                 ActivityManager.start(
                     DetailActivity::class.java,
@@ -51,47 +44,40 @@ class NavigationFragment : BaseVmFragment<NavigationViewModle>(), ScrollToTop {
                 )
             }
         }
-        btnReload.setOnClickListener {
+        mBinding.reloadView.btnReload.setOnClickListener {
             mViewModel.getData()
         }
-        recyclerView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
+        mBinding.recyclerView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
             if (activity is MainActivity && scrollY != oldScrollY) {
                 (activity as MainActivity).animateBottomNavigationView(scrollY < oldScrollY)
             }
             if (scrollY < oldScrollY) {
-                tvFloatTitle.text = mAdapter.data[currentPosition].name
+                mBinding.tvFloatTitle.text = mAdapter.data[currentPosition].name
             }
-            val lm = recyclerView.layoutManager as LinearLayoutManager
+            val lm = mBinding.recyclerView.layoutManager as LinearLayoutManager
             val nextView = lm.findViewByPosition(currentPosition + 1)
             if (nextView != null) {
-                tvFloatTitle.y = if (nextView.top < tvFloatTitle.measuredHeight) {
-                    (nextView.top - tvFloatTitle.measuredHeight).toFloat()
+                mBinding.tvFloatTitle.y = if (nextView.top < mBinding.tvFloatTitle.measuredHeight) {
+                    (nextView.top - mBinding.tvFloatTitle.measuredHeight).toFloat()
                 } else {
                     0f
                 }
             }
             currentPosition = lm.findFirstVisibleItemPosition()
             if (scrollY > oldScrollY) {
-                tvFloatTitle.text = mAdapter.data[currentPosition].name
+                mBinding.tvFloatTitle.text = mAdapter.data[currentPosition].name
             }
         }
     }
 
     override fun observe() {
+        mBinding.viewModel = mViewModel
         mViewModel.run {
             banners.observe(viewLifecycleOwner, Observer {
                 setupBanner(it)
             })
             navigations.observe(viewLifecycleOwner, Observer {
-                tvFloatTitle.isGone = it.isEmpty()
-                tvFloatTitle.text = it[0].name
                 mAdapter.setNewData(it)
-            })
-            refreshStatus.observe(viewLifecycleOwner, Observer {
-                swipeRefreshLayout.isRefreshing = it
-            })
-            reloadStatus.observe(viewLifecycleOwner, Observer {
-                reloadView.isVisible = it
             })
         }
     }
@@ -101,7 +87,7 @@ class NavigationFragment : BaseVmFragment<NavigationViewModle>(), ScrollToTop {
     }
 
     private fun setupBanner(banners: List<Banner>) {
-        bannerView.run {
+        mBinding.bannerView.run {
             setBannerStyle(BannerConfig.NOT_INDICATOR)
             setImageLoader(BannerImageLoader())
             setImages(banners)
@@ -118,6 +104,6 @@ class NavigationFragment : BaseVmFragment<NavigationViewModle>(), ScrollToTop {
     }
 
     override fun scrollToTop() {
-        recyclerView?.smoothScrollToPosition(0)
+        mBinding.recyclerView.smoothScrollToPosition(0)
     }
 }

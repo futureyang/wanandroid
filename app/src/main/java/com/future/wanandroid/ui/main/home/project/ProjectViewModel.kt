@@ -52,7 +52,7 @@ class ProjectViewModel @ViewModelInject constructor(
         )
     }
 
-    fun refreshProjectArticleList(checkedPosition: Int = checkedCategory.value ?: INITIAL_CHECKED) {
+    fun refresh(checkedPosition: Int = checkedCategory.value ?: INITIAL_CHECKED) {
         refreshStatus.value = true
         reloadStatus.value = false
         if (checkedPosition != checkedCategory.value) {
@@ -75,7 +75,7 @@ class ProjectViewModel @ViewModelInject constructor(
         )
     }
 
-    fun loadMoreProjectArticleList() {
+    fun loadMore() {
         loadMoreStatus.value = LoadMoreStatus.LOADING
         launch(
             block = {

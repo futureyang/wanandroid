@@ -1,6 +1,5 @@
 package com.future.wanandroid.ui.main.home.plaza
 
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.future.mvvmk.base.BaseVmFragment
@@ -14,15 +13,15 @@ import com.future.wanandroid.ui.details.DetailActivity
 import com.future.wanandroid.ui.main.adapter.SimpleArticleAdapter
 import com.future.wanandroid.common.loadmore.CommonLoadMoreView
 import com.future.wanandroid.common.loadmore.LoadMoreStatus
+import com.future.wanandroid.databinding.FragmentPlazaBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.include_reload.*
-import kotlinx.android.synthetic.main.layout_common_recyclerview_refresh.*
+import kotlinx.android.synthetic.main.include_reload.view.*
 
 /**
  * 广场
  */
 @AndroidEntryPoint
-class PlazaFragment : BaseVmFragment<PlazaViewModel>(), ScrollToTop {
+class PlazaFragment : BaseVmFragment<PlazaViewModel, FragmentPlazaBinding>(), ScrollToTop {
 
     companion object {
         fun newInstance() = PlazaFragment()
@@ -34,20 +33,16 @@ class PlazaFragment : BaseVmFragment<PlazaViewModel>(), ScrollToTop {
 
     override fun viewModelClass() = PlazaViewModel::class.java
 
-    override fun getLayoutId() = R.layout.layout_common_recyclerview_refresh
+    override fun getLayoutId() = R.layout.fragment_plaza
 
     override fun initView() {
-        swipe_refresh.run {
-            setColorSchemeResources(R.color.textColorPrimary)
-            setProgressBackgroundColorSchemeResource(R.color.bgColorPrimary)
-            setOnRefreshListener { mViewModel.refreshArticleList() }
-        }
+        mBinding.resId = R.color.textColorPrimary
         mAdapter = SimpleArticleAdapter().apply {
             setLoadMoreView(CommonLoadMoreView())
-            bindToRecyclerView(recyclerView)
+            bindToRecyclerView(mBinding.recyclerView)
             setOnLoadMoreListener({
-                mViewModel.loadMoreArticleList()
-            }, recyclerView)
+                mViewModel.loadMore()
+            }, mBinding.recyclerView)
             setOnItemClickListener { _, _, position ->
                 val article = mAdapter.data[position]
                 ActivityManager.start(
@@ -64,20 +59,17 @@ class PlazaFragment : BaseVmFragment<PlazaViewModel>(), ScrollToTop {
                 }
             }
         }
-        (recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
-        btnReload.setOnClickListener {
-            mViewModel.refreshArticleList()
+        (mBinding.recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+        mBinding.reloadView.btnReload.setOnClickListener {
+            mViewModel.refresh()
         }
     }
 
     override fun observe() {
-        super.observe()
+        mBinding.viewModel = mViewModel
         mViewModel.run {
             articleList.observe(viewLifecycleOwner, Observer {
                 mAdapter.setNewData(it)
-            })
-            refreshStatus.observe(viewLifecycleOwner, Observer {
-                swipe_refresh.isRefreshing = it
             })
             loadMoreStatus.observe(viewLifecycleOwner, Observer {
                 when (it) {
@@ -86,9 +78,6 @@ class PlazaFragment : BaseVmFragment<PlazaViewModel>(), ScrollToTop {
                     LoadMoreStatus.END -> mAdapter.loadMoreEnd()
                     else -> return@Observer
                 }
-            })
-            reloadStatus.observe(viewLifecycleOwner, Observer {
-                reloadView.isVisible = it
             })
         }
         LiveBus.observe<Boolean>(USER_LOGIN_STATE_CHANGED, this) {
@@ -100,10 +89,10 @@ class PlazaFragment : BaseVmFragment<PlazaViewModel>(), ScrollToTop {
     }
 
     override fun lazyLoadData() {
-        mViewModel.refreshArticleList()
+        mViewModel.refresh()
     }
 
     override fun scrollToTop() {
-        recyclerView.smoothScrollToPosition(0)
+        mBinding.recyclerView.smoothScrollToPosition(0)
     }
 }

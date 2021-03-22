@@ -17,6 +17,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.layout_common_recyclerview.*
 
+/**
+ * 体系分类dialog
+ */
 class HierarchCategoryFragment : BottomSheetDialogFragment() {
 
     companion object {
@@ -75,10 +78,17 @@ class HierarchCategoryFragment : BottomSheetDialogFragment() {
         }
     }
 
-    fun show(manager: FragmentManager, height: Int? = null) {
+    fun showFragment(manager: FragmentManager) {
+        this.height = (getSreenHeight(MyApplication.context) * 0.75f).toInt()
+        if (!this.isAdded) {
+            super.show(manager, "HierarchCategoryFragment")
+        }
+    }
+
+    fun showFragment(manager: FragmentManager, height: Int? = null) {
         this.height = height ?: (getSreenHeight(MyApplication.context) * 0.75f).toInt()
         if (!this.isAdded) {
-            super.show(manager, "SystemCategoryFragment")
+            super.show(manager, "HierarchCategoryFragment")
         }
     }
 

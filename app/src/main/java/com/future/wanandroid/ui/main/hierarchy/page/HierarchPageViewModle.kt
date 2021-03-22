@@ -33,7 +33,7 @@ class HierarchPageViewModle @ViewModelInject constructor(
     private var id: Int = -1
     private var refreshJob: Job? = null
 
-    fun refreshArticleList(cid: Int) {
+    fun refresh(cid: Int) {
         if (cid != id) {
             cancelJob(refreshJob)
             id = cid
@@ -55,7 +55,7 @@ class HierarchPageViewModle @ViewModelInject constructor(
         )
     }
 
-    fun loadMoreArticleList(cid: Int) {
+    fun loadMore(cid: Int) {
         loadMoreStatus.value = LoadMoreStatus.LOADING
         launch(
             block = {

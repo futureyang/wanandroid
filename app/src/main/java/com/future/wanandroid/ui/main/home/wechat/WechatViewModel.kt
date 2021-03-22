@@ -52,7 +52,7 @@ class WechatViewModel @ViewModelInject constructor(
         )
     }
 
-    fun refreshWechatArticleList(checkedPosition: Int = checkedCategory.value ?: INITIAL_CHECKED) {
+    fun refresh(checkedPosition: Int = checkedCategory.value ?: INITIAL_CHECKED) {
         refreshStatus.value = true
         reloadStatus.value = false
         if (checkedPosition != checkedCategory.value) {
@@ -75,7 +75,7 @@ class WechatViewModel @ViewModelInject constructor(
         )
     }
 
-    fun loadMoreWechatArticleList() {
+    fun loadMore() {
         loadMoreStatus.value = LoadMoreStatus.LOADING
         launch(
             block = {

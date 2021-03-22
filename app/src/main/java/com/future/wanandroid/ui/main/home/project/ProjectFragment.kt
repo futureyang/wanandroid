@@ -1,7 +1,6 @@
 package com.future.wanandroid.ui.main.home.project
 
 import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmFragment
 import com.future.wanandroid.R
@@ -15,15 +14,15 @@ import com.future.wanandroid.ui.main.adapter.ArticleAdapter
 import com.future.wanandroid.ui.main.adapter.CategoryAdapter
 import com.future.wanandroid.common.loadmore.CommonLoadMoreView
 import com.future.wanandroid.common.loadmore.LoadMoreStatus
+import com.future.wanandroid.databinding.FragmentProjectBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.include_reload.view.*
-import kotlinx.android.synthetic.main.layout_common_recyclerview_double.*
 
 /**
  * 项目
  */
 @AndroidEntryPoint
-class ProjectFragment : BaseVmFragment<ProjectViewModel>(), ScrollToTop {
+class ProjectFragment : BaseVmFragment<ProjectViewModel, FragmentProjectBinding>(), ScrollToTop {
 
     companion object {
         fun newInstance() = ProjectFragment()
@@ -37,26 +36,22 @@ class ProjectFragment : BaseVmFragment<ProjectViewModel>(), ScrollToTop {
 
     override fun viewModelClass() = ProjectViewModel::class.java
 
-    override fun getLayoutId() = R.layout.layout_common_recyclerview_double
+    override fun getLayoutId() = R.layout.fragment_project
 
     override fun initView() {
-        swipe_refresh.apply {
-            setColorSchemeResources(R.color.textColorPrimary)
-            setProgressBackgroundColorSchemeResource(R.color.bgColorPrimary)
-            setOnRefreshListener { mViewModel.refreshProjectArticleList() }
-        }
+        mBinding.resId = R.color.textColorPrimary
         mCategoryAdapter = CategoryAdapter().apply {
-            bindToRecyclerView(rvCategory)
+            bindToRecyclerView(mBinding.rvCategory)
             onCheckedListener = {
-                mViewModel.refreshProjectArticleList(it)
+                mViewModel.refresh(it)
             }
         }
         mAdapter = ArticleAdapter(R.layout.item_article).apply {
             setLoadMoreView(CommonLoadMoreView())
-            bindToRecyclerView(recyclerView)
+            bindToRecyclerView(mBinding.recyclerView)
             setOnLoadMoreListener({
-                mViewModel.loadMoreProjectArticleList()
-            }, recyclerView)
+                mViewModel.loadMore()
+            }, mBinding.recyclerView)
             setOnItemClickListener { _, _, position ->
                 val article = mAdapter.data[position]
                 ActivityManager.start(
@@ -73,19 +68,19 @@ class ProjectFragment : BaseVmFragment<ProjectViewModel>(), ScrollToTop {
                 }
             }
         }
-        reloadListView.btnReload.setOnClickListener {
-            mViewModel.refreshProjectArticleList()
+        mBinding.reloadListView.btnReload.setOnClickListener {
+            mViewModel.refresh()
         }
-        reloadView.btnReload.setOnClickListener {
+        mBinding.reloadView.btnReload.setOnClickListener {
             mViewModel.getProjectCategory()
         }
     }
 
     override fun observe() {
-        super.observe()
+        mBinding.viewModel = mViewModel
         mViewModel.run {
             categories.observe(viewLifecycleOwner, Observer {
-                rvCategory.isGone = it.isEmpty()
+                mBinding.rvCategory.isGone = it.isEmpty()
                 mCategoryAdapter.setNewData(it)
             })
             checkedCategory.observe(viewLifecycleOwner, Observer {
@@ -94,9 +89,6 @@ class ProjectFragment : BaseVmFragment<ProjectViewModel>(), ScrollToTop {
             articleList.observe(viewLifecycleOwner, Observer {
                 mAdapter.setNewData(it)
             })
-            refreshStatus.observe(viewLifecycleOwner, Observer {
-                swipe_refresh.isRefreshing = it
-            })
             loadMoreStatus.observe(viewLifecycleOwner, Observer {
                 when (it) {
                     LoadMoreStatus.COMPLETED -> mAdapter.loadMoreComplete()
@@ -104,12 +96,6 @@ class ProjectFragment : BaseVmFragment<ProjectViewModel>(), ScrollToTop {
                     LoadMoreStatus.END -> mAdapter.loadMoreEnd()
                     else -> return@Observer
                 }
-            })
-            reloadStatus.observe(viewLifecycleOwner, Observer {
-                reloadView.isVisible = it
-            })
-            reloadListStatus.observe(viewLifecycleOwner, Observer {
-                reloadListView.isVisible = it
             })
         }
         LiveBus.observe<Boolean>(USER_LOGIN_STATE_CHANGED, this) {
@@ -125,6 +111,6 @@ class ProjectFragment : BaseVmFragment<ProjectViewModel>(), ScrollToTop {
     }
 
     override fun scrollToTop() {
-        recyclerView.smoothScrollToPosition(0)
+        mBinding.recyclerView.smoothScrollToPosition(0)
     }
 }

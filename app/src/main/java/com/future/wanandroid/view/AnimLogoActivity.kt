@@ -11,11 +11,11 @@ import com.future.wanandroid.R
  * Created by yangqc on 2021/1/22
  *
  */
-class ViewActivity : AppCompatActivity() {
+class AnimLogoActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.view_)
+        setContentView(R.layout.view_animlogo)
         val animLogoView: AnimLogoView = findViewById(R.id.anim_logo)
         animLogoView.addOffsetAnimListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator) {

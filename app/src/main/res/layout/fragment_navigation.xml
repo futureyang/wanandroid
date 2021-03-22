@@ -1,77 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/bgColorPrimary"
-    android:orientation="vertical">
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.future.wanandroid.ui.main.navigation.NavigationViewModle" />
+
+        <variable
+            name="resId"
+            type="Integer" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/bgColorPrimary"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            app:swipeRefreshLayoutProgressSpinnerBackgroundColor="@color/bgColorPrimary"
+            bind:colorSchemeResources="@{resId}"
+            bind:onRefreshListener="@{() -> viewModel.getData()}"
+            bind:refreshing="@{viewModel.refreshStatus}">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <com.youth.banner.Banner
-                    android:id="@+id/bannerView"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    app:banner_default_image="@drawable/shape_bg_image_default"
-                    app:delay_time="5000"
-                    app:image_scale_type="fit_xy"
-                    app:is_auto_play="true"
-                    app:layout_constraintDimensionRatio="h,16:9"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:scroll_time="1500" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:layout_height="wrap_content">
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                    <com.youth.banner.Banner
+                        android:id="@+id/bannerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        app:banner_default_image="@drawable/shape_bg_image_default"
+                        app:delay_time="5000"
+                        app:image_scale_type="fit_xy"
+                        app:is_auto_play="true"
+                        app:layout_constraintDimensionRatio="h,16:9"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:scroll_time="1500" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recyclerView"
+                <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/bgColorSecondary"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/tvFloatTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/bgColorPrimary"
-                    android:fontFamily="sans-serif-medium"
-                    android:padding="@dimen/dp_16"
-                    android:textColor="@color/textColorSecondary"
-                    android:visibility="gone"
-                    tools:text="常用网站"
-                    tools:visibility="visible" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/bgColorSecondary"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-                <include
-                    android:id="@+id/reloadView"
-                    layout="@layout/include_reload"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone" />
-            </FrameLayout>
-        </LinearLayout>
+                    <TextView
+                        android:id="@+id/tvFloatTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/bgColorPrimary"
+                        android:fontFamily="sans-serif-medium"
+                        android:padding="@dimen/dp_16"
+                        android:text="@{viewModel.navigations.get(0).name}"
+                        android:textColor="@color/textColorSecondary"
+                        android:visibility="@{viewModel.navigations.empty ? View.GONE : View.VISIBLE}"
+                        tools:text="常用网站"
+                        tools:visibility="visible" />
 
+                    <include
+                        android:id="@+id/reloadView"
+                        layout="@layout/include_reload"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="@{viewModel.reloadStatus ? View.VISIBLE : View.GONE}"
+                        tools:visibility="gone" />
+                </FrameLayout>
+            </LinearLayout>
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+    </LinearLayout>
+</layout>

@@ -14,3 +14,8 @@ fun ImageView.loadBingPic(url: String?) {
 fun SwipeRefreshLayout.colorSchemeResources(resId: Int) {
     setColorSchemeResources(resId)
 }
+
+@BindingAdapter("bind:selected")
+fun ImageView.selected(isSelected: Boolean) {
+    setSelected(isSelected)
+}

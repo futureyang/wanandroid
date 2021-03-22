@@ -7,10 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import com.future.wanandroid.util.showProgress
 
-abstract class BaseFragment : Fragment(){
+abstract class BaseFragment<VB: ViewDataBinding> : Fragment(){
+
+    lateinit var mBinding: VB
 
     private var lazyLoaded = false
 
@@ -31,7 +35,9 @@ abstract class BaseFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(getLayoutId(), container, false)
+        mBinding = DataBindingUtil.inflate(inflater, getLayoutId(), container, false)
+        mBinding.lifecycleOwner = this
+        return mBinding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

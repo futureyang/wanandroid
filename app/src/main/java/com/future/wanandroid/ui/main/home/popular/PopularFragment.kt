@@ -1,6 +1,5 @@
 package com.future.wanandroid.ui.main.home.popular
 
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.DefaultItemAnimator
 import com.future.mvvmk.base.BaseVmFragment
@@ -14,16 +13,16 @@ import com.future.wanandroid.ui.details.DetailActivity
 import com.future.wanandroid.ui.main.adapter.ArticleAdapter
 import com.future.wanandroid.common.loadmore.CommonLoadMoreView
 import com.future.wanandroid.common.loadmore.LoadMoreStatus
+import com.future.wanandroid.databinding.FragmentPopularBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.include_reload.*
-import kotlinx.android.synthetic.main.layout_common_recyclerview_refresh.*
+import kotlinx.android.synthetic.main.include_reload.view.*
 
 
 /**
  * 热门
  */
 @AndroidEntryPoint
-class PopularFragment : BaseVmFragment<PopularViewModel>(), ScrollToTop {
+class PopularFragment : BaseVmFragment<PopularViewModel, FragmentPopularBinding>(), ScrollToTop {
 
     companion object {
         fun newInstance() = PopularFragment()
@@ -35,20 +34,16 @@ class PopularFragment : BaseVmFragment<PopularViewModel>(), ScrollToTop {
 
     override fun viewModelClass() = PopularViewModel::class.java
 
-    override fun getLayoutId() = R.layout.layout_common_recyclerview_refresh
+    override fun getLayoutId() = R.layout.fragment_popular
 
     override fun initView() {
-        swipe_refresh.run {
-            setColorSchemeResources(R.color.textColorPrimary)
-            setProgressBackgroundColorSchemeResource(R.color.bgColorPrimary)
-            setOnRefreshListener { mViewModel.refreshArticleList() }
-        }
+        mBinding.resId = R.color.textColorPrimary
         mAdapter = ArticleAdapter().apply {
             setLoadMoreView(CommonLoadMoreView())
-            bindToRecyclerView(recyclerView)
+            bindToRecyclerView(mBinding.recyclerView)
             setOnLoadMoreListener({
-                mViewModel.loadMoreArticleList()
-            }, recyclerView)
+                mViewModel.loadMore()
+            }, mBinding.recyclerView)
             setOnItemClickListener { _, _, position ->
                 val article = mAdapter.data[position]
                 ActivityManager.start(
@@ -64,21 +59,18 @@ class PopularFragment : BaseVmFragment<PopularViewModel>(), ScrollToTop {
                     mViewModel.collect(article.id, article.collect)
                 }
             }
-            (recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
-            btnReload.setOnClickListener {
-                mViewModel.refreshArticleList()
+            (mBinding.recyclerView.itemAnimator as DefaultItemAnimator).supportsChangeAnimations = false
+            mBinding.reloadView.btnReload.setOnClickListener {
+                mViewModel.refresh()
             }
         }
     }
 
     override fun observe() {
-        super.observe()
+        mBinding.viewModel = mViewModel
         mViewModel.run {
             articleList.observe(viewLifecycleOwner, Observer {
                 mAdapter.setNewData(it)
-            })
-            refreshStatus.observe(viewLifecycleOwner, Observer {
-                swipe_refresh.isRefreshing = it
             })
             loadMoreStatus.observe(viewLifecycleOwner, Observer {
                 when (it) {
@@ -87,9 +79,6 @@ class PopularFragment : BaseVmFragment<PopularViewModel>(), ScrollToTop {
                     LoadMoreStatus.END -> mAdapter.loadMoreEnd()
                     else -> return@Observer
                 }
-            })
-            reloadStatus.observe(viewLifecycleOwner, Observer {
-                reloadView.isVisible = it
             })
         }
         LiveBus.observe<Boolean>(USER_LOGIN_STATE_CHANGED, this) {
@@ -101,10 +90,10 @@ class PopularFragment : BaseVmFragment<PopularViewModel>(), ScrollToTop {
     }
 
     override fun lazyLoadData() {
-        mViewModel.refreshArticleList()
+        mViewModel.refresh()
     }
 
     override fun scrollToTop() {
-        recyclerView.smoothScrollToPosition(0)
+        mBinding.recyclerView.smoothScrollToPosition(0)
     }
 }

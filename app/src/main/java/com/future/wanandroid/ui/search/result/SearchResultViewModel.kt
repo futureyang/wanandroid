@@ -27,7 +27,7 @@ class SearchResultViewModel @ViewModelInject constructor(
     val loadMoreStatus = MutableLiveData<LoadMoreStatus>()
     val reloadStatus = MutableLiveData<Boolean>()
     val emptyStatus = MutableLiveData<Boolean>()
-    private var currentKeywords = ""
+    var currentKeywords = ""
     private var page = INITIAL_PAGE
 
     fun search(keywords: String = currentKeywords) {

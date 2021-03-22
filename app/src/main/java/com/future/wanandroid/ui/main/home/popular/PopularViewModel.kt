@@ -25,7 +25,7 @@ class PopularViewModel @ViewModelInject constructor(
     val refreshStatus = MutableLiveData<Boolean>() //正在刷新
     val reloadStatus = MutableLiveData<Boolean>() //
 
-    fun refreshArticleList() {
+    fun refresh() {
         refreshStatus.value = true
         reloadStatus.value = false
         launch({
@@ -45,7 +45,7 @@ class PopularViewModel @ViewModelInject constructor(
         })
     }
 
-    fun loadMoreArticleList() {
+    fun loadMore() {
         launch({
             val articleData = popularRepository.getArticleList(page)
             page = articleData.curPage

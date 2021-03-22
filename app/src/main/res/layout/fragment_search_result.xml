@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.future.wanandroid.ui.search.result.SearchResultViewModel" />
+
+        <variable
+            name="resId"
+            type="Integer" />
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -8,32 +25,39 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clTitle">
+        app:layout_constraintTop_toBottomOf="@+id/clTitle"
+        app:swipeRefreshLayoutProgressSpinnerBackgroundColor="@color/bgColorPrimary"
+        bind:colorSchemeResources="@{resId}"
+        bind:onRefreshListener="@{() -> viewModel.search(viewModel.currentKeywords)}"
+        bind:refreshing="@{viewModel.refreshStatus}">
 
-    <FrameLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-        <include
+            <include
                 android:id="@+id/reloadView"
                 layout="@layout/include_reload"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:visibility="@{viewModel.reloadStatus ? View.VISIBLE : View.GONE}"
+                tools:visibility="gone" />
 
-        <include
+            <include
                 android:id="@+id/emptyView"
                 layout="@layout/include_empty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone" />
+                android:visibility="@{viewModel.emptyStatus ? View.VISIBLE : View.GONE}"
+                tools:visibility="gone" />
 
-    </FrameLayout>
+        </FrameLayout>
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</layout>

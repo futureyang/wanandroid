@@ -1,6 +1,5 @@
 package com.future.wanandroid.ui.search.result
 
-import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import com.future.mvvmk.base.BaseVmFragment
 import com.future.wanandroid.R
@@ -12,16 +11,16 @@ import com.future.wanandroid.ui.details.DetailActivity
 import com.future.wanandroid.ui.main.adapter.ArticleAdapter
 import com.future.wanandroid.common.loadmore.CommonLoadMoreView
 import com.future.wanandroid.common.loadmore.LoadMoreStatus
+import com.future.wanandroid.databinding.FragmentSearchResultBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_search_result.*
-import kotlinx.android.synthetic.main.include_reload.*
+import kotlinx.android.synthetic.main.include_reload.view.*
 
 /**
  * Created by yangqc on 2021/1/8
  * 搜索结果
  */
 @AndroidEntryPoint
-class SearchResultFragment : BaseVmFragment<SearchResultViewModel>() {
+class SearchResultFragment : BaseVmFragment<SearchResultViewModel, FragmentSearchResultBinding>() {
 
     companion object {
         fun newInstance() = SearchResultFragment()
@@ -36,9 +35,10 @@ class SearchResultFragment : BaseVmFragment<SearchResultViewModel>() {
     override fun getLayoutId() = R.layout.fragment_search_result
 
     override fun initView() {
+        mBinding.resId = R.color.textColorPrimary
         mAdapter = ArticleAdapter().apply {
             setLoadMoreView(CommonLoadMoreView())
-            bindToRecyclerView(recyclerView)
+            bindToRecyclerView(mBinding.recyclerView)
             setOnItemClickListener { _, _, position ->
                 val article = data[position]
                 ActivityManager.start(
@@ -55,26 +55,16 @@ class SearchResultFragment : BaseVmFragment<SearchResultViewModel>() {
                 }
             }
         }
-        swipeRefreshLayout.run {
-            setColorSchemeResources(R.color.textColorPrimary)
-            setProgressBackgroundColorSchemeResource(R.color.bgColorPrimary)
-            setOnRefreshListener { mViewModel.search() }
-        }
-        btnReload.setOnClickListener {
+        mBinding.reloadView.btnReload.setOnClickListener {
             mViewModel.search()
         }
     }
 
     override fun observe() {
+        mBinding.viewModel = mViewModel
         mViewModel.run {
             articleList.observe(viewLifecycleOwner, Observer {
                 mAdapter.setNewData(it)
-            })
-            refreshStatus.observe(viewLifecycleOwner, Observer {
-                swipeRefreshLayout.isRefreshing = it
-            })
-            emptyStatus.observe(viewLifecycleOwner, Observer {
-                emptyView.isVisible = it
             })
             loadMoreStatus.observe(viewLifecycleOwner, Observer {
                 when (it) {
@@ -83,9 +73,6 @@ class SearchResultFragment : BaseVmFragment<SearchResultViewModel>() {
                     LoadMoreStatus.END -> mAdapter.loadMoreEnd()
                     else -> return@Observer
                 }
-            })
-            reloadStatus.observe(viewLifecycleOwner, Observer {
-                reloadView.isVisible = it
             })
         }
         LiveBus.observe<Boolean>(USER_LOGIN_STATE_CHANGED, viewLifecycleOwner) {

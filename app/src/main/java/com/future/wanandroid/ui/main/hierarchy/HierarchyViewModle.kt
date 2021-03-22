@@ -8,6 +8,7 @@ import com.future.wanandroid.bean.Category
 class HierarchyViewModle @ViewModelInject constructor(val repository: HierarchyRepository) : BaseViewModel() {
 
     val categories = MutableLiveData<MutableList<Category>>()
+    val loadingComplete = MutableLiveData<Boolean>()
     val loadingStatus = MutableLiveData<Boolean>()
     val reloadStatus = MutableLiveData<Boolean>()
 
@@ -17,6 +18,7 @@ class HierarchyViewModle @ViewModelInject constructor(val repository: HierarchyR
         launch(
             block = {
                 categories.value = repository.getArticleCategories()
+                loadingComplete.value = true
                 loadingStatus.value = false
             },
             error = {
