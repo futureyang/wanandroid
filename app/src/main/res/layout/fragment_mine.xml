@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -43,12 +44,14 @@
                     android:orientation="vertical"
                     android:paddingBottom="@dimen/dp_20">
 
-                    <androidx.appcompat.widget.AppCompatImageView
+                    <com.future.wanandroid.view.CircleImageView
                         android:id="@+id/ivPhoto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/dp_30"
-                        android:src="@drawable/bg_splash" />
+                        android:layout_width="@dimen/dp_100"
+                        android:layout_height="@dimen/dp_100"
+                        android:layout_margin="@dimen/dp_30"
+                        tools:src="@drawable/bg_splash"
+                        bind:loadBingUri="@{viewModel.photoUri}"
+                        bind:errorDrawable="@{@drawable/bg_splash}"/>
 
                     <TextView
                         android:id="@+id/tv_login_registered"

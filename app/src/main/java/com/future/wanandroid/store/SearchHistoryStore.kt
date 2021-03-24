@@ -1,6 +1,5 @@
 package com.future.wanandroid.store
 
-import com.future.wanandroid.MyApplication
 import com.future.wanandroid.util.getSpValue
 import com.future.wanandroid.util.putSpValue
 import com.google.gson.Gson
@@ -20,18 +19,18 @@ object SearchHistoryStore {
         }
         history.add(0, words)
         val listStr = mGson.toJson(history)
-        putSpValue(SP_SEARCH_HISTORY, MyApplication.context, KEY_SEARCH_HISTORY, listStr)
+        putSpValue(SP_SEARCH_HISTORY, KEY_SEARCH_HISTORY, listStr)
     }
 
     fun deleteSearchHistory(words: String) {
         val history = getSearchHistory()
         history.remove(words)
         val listStr = mGson.toJson(history)
-        putSpValue(SP_SEARCH_HISTORY, MyApplication.context, KEY_SEARCH_HISTORY, listStr)
+        putSpValue(SP_SEARCH_HISTORY, KEY_SEARCH_HISTORY, listStr)
     }
 
     fun getSearchHistory(): MutableList<String> {
-        val listStr = getSpValue(SP_SEARCH_HISTORY, MyApplication.context, KEY_SEARCH_HISTORY, "")
+        val listStr = getSpValue(SP_SEARCH_HISTORY, KEY_SEARCH_HISTORY, "")
         return if (listStr.isEmpty()) {
             mutableListOf()
         } else {

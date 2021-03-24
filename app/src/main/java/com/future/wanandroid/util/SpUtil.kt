@@ -10,9 +10,9 @@ private const val SP_WANANDROID = "sp_wanandroid"
 @JvmOverloads
 fun <T> getSpValue(
     filename: String = SP_WANANDROID,
-    context: Context = MyApplication.context,
     key: String,
-    defaultVal: T
+    defaultVal: T,
+    context: Context = MyApplication.context
 ): T {
     val sp = context.getSharedPreferences(filename, Context.MODE_PRIVATE)
     return when (defaultVal) {
@@ -29,9 +29,9 @@ fun <T> getSpValue(
 @JvmOverloads
 fun <T> putSpValue(
     filename: String = SP_WANANDROID,
-    context: Context = MyApplication.context,
     key: String,
-    value: T
+    value: T,
+    context: Context = MyApplication.context
 ) {
     val editor = context.getSharedPreferences(filename, Context.MODE_PRIVATE).edit()
     when (value) {

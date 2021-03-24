@@ -1,8 +1,11 @@
 package com.future.mvvmk.base
 
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.future.toolkit.utils.ToastUtils
+import com.future.toolkit.utils.log.LogUtils
 import com.future.wanandroid.MyApplication
 import com.future.wanandroid.R
 import com.future.wanandroid.common.bus.LiveBus
@@ -39,6 +42,7 @@ abstract class BaseViewModel : ViewModel() {
             try {
                 block.invoke()
             } catch (e: Exception) {
+                e.message?.let { LogUtils.e("onError()", it) }
                 when (e) {
                     is CancellationException -> {
                         cancel?.invoke(e)

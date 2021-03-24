@@ -14,12 +14,12 @@ object UserInfoStore {
     private val mGson by lazy { Gson() }
 
     fun isLogin(): Boolean {
-        val userInfoStr = getSpValue(SP_USER_INFO, MyApplication.context, KEY_USER_INFO, "")
+        val userInfoStr = getSpValue(SP_USER_INFO, KEY_USER_INFO, "")
         return userInfoStr.isNotEmpty()
     }
 
     fun getUserInfo(): UserInfo? {
-        val userInfoStr = getSpValue(SP_USER_INFO, MyApplication.context, KEY_USER_INFO, "")
+        val userInfoStr = getSpValue(SP_USER_INFO, KEY_USER_INFO, "")
         return if (userInfoStr.isNotEmpty()) {
             mGson.fromJson(userInfoStr, UserInfo::class.java)
         } else {
@@ -28,7 +28,7 @@ object UserInfoStore {
     }
 
     fun setUserInfo(userInfo: UserInfo) =
-        putSpValue(SP_USER_INFO, MyApplication.context, KEY_USER_INFO, mGson.toJson(userInfo))
+        putSpValue(SP_USER_INFO, KEY_USER_INFO, mGson.toJson(userInfo))
 
     fun clearUserInfo() {
         clearSpValue(SP_USER_INFO, MyApplication.context)
