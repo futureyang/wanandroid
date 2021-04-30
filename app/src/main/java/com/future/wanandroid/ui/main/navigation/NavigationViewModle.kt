@@ -4,7 +4,7 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.MutableLiveData
 import com.future.mvvmk.base.BaseViewModel
 import com.xiaojianjun.wanandroid.model.bean.Banner
-import com.xiaojianjun.wanandroid.model.bean.Navigation
+import com.future.wanandroid.bean.Navigation
 
 class NavigationViewModle @ViewModelInject constructor(val repository: NavigationRepository) :
     BaseViewModel() {

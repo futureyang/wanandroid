@@ -28,6 +28,7 @@ class RegisterActivity : BaseVmActivity<RegisterViewModel, ActivityRegisterBindi
     override fun getLayoutId() = R.layout.activity_register
 
     override fun initView(savedInstanceState: Bundle?) {
+        mBinding.activity = this
         layout_register_password.apply {
             realRightView.findViewById<ImageView>(R.id.iv_template_item_right).apply {
                 setOnClickListener {

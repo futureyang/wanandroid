@@ -10,9 +10,9 @@ import com.future.wanandroid.common.bus.USER_COLLECT_UPDATED
 import com.future.wanandroid.common.bus.USER_LOGIN_STATE_CHANGED
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.details.DetailActivity
-import com.future.wanandroid.ui.main.adapter.ArticleAdapter
 import com.future.wanandroid.common.loadmore.CommonLoadMoreView
 import com.future.wanandroid.databinding.ActivityHistoryBinding
+import com.future.wanandroid.ui.main.adapter.SimpleArticleAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.include_title.*
 
@@ -25,14 +25,14 @@ class HistoryActivity : BaseVmActivity<HistoryViewModel, ActivityHistoryBinding>
 
     private var position = 0
 
-    private lateinit var mAdapter: ArticleAdapter
+    private lateinit var mAdapter: SimpleArticleAdapter
 
     override fun viewModelClass() = HistoryViewModel::class.java
 
     override fun getLayoutId() = R.layout.activity_history
 
     override fun initView(savedInstanceState: Bundle?) {
-        mAdapter = ArticleAdapter().apply {
+        mAdapter = SimpleArticleAdapter().apply {
             setLoadMoreView(CommonLoadMoreView())
             bindToRecyclerView(mBinding.recyclerView)
             setOnItemClickListener { _, _, position ->

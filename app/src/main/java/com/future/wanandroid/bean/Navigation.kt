@@ -1,6 +1,4 @@
-package com.xiaojianjun.wanandroid.model.bean
-
-import com.future.wanandroid.bean.Article
+package com.future.wanandroid.bean
 
 data class Navigation(
     val cid: Int,

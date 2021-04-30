@@ -9,7 +9,7 @@
         android:focusable="true"
         android:orientation="vertical">
 
-    <ImageView
+    <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivTime"
             android:layout_width="32dp"
             android:layout_height="32dp"

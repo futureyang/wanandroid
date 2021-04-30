@@ -11,7 +11,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorWhite">
+        android:background="@color/bgColorPrimary">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/ivBack"
@@ -53,6 +53,7 @@
                 android:layout_height="wrap_content"
                 app:cil_editable="true"
                 app:cil_hint="@string/hint_account"
+                app:cil_hintColor="@color/textColorThird"
                 app:cil_leftImageId="@drawable/ic_account"
                 app:cil_rightVisible="false" />
 
@@ -63,6 +64,7 @@
                 android:layout_marginTop="@dimen/dp_30"
                 app:cil_editable="true"
                 app:cil_hint="@string/hint_password"
+                app:cil_hintColor="@color/textColorThird"
                 app:cil_inputCipher="true"
                 app:cil_leftImageId="@drawable/ic_password"
                 app:cil_rightImageId="@drawable/ic_visibility_off" />
@@ -74,6 +76,7 @@
                 android:layout_marginTop="@dimen/dp_30"
                 app:cil_editable="true"
                 app:cil_hint="@string/hint_password_confirm"
+                app:cil_hintColor="@color/textColorThird"
                 app:cil_inputCipher="true"
                 app:cil_leftImageId="@drawable/ic_password"
                 app:cil_rightImageId="@drawable/ic_visibility_off" />

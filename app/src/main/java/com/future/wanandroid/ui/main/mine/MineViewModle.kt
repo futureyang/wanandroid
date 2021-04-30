@@ -16,12 +16,16 @@ class MineViewModle @ViewModelInject constructor(val repository: MineRepository)
     fun getUserInfo() {
         isLogin.value = userRepository.isLogin()
         userInfo.value = userRepository.getUserInfo()
-        launch(
-            block = {
-                photoUri.value = repository.getUserPhoto(userInfo.value!!.id)
-                LogUtils.d("ImageUrl", photoUri.value)
-            }
-        )
+        if (isLogin.value!!) {
+            launch(
+                block = {
+                    photoUri.value = repository.getUserPhoto(userInfo.value!!.id)
+                    LogUtils.d("ImageUrl", photoUri.value)
+                }
+            )
+        } else {
+            photoUri.value = ""
+        }
     }
 
     fun saveUserPhoto(uri: String) {

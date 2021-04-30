@@ -1,10 +1,9 @@
 package com.future.wanandroid.network.service
 
 import com.future.wanandroid.bean.*
-import retrofit2.Call
 import com.future.wanandroid.network.ApiResult
 import com.xiaojianjun.wanandroid.model.bean.Banner
-import com.xiaojianjun.wanandroid.model.bean.Navigation
+import com.future.wanandroid.bean.Navigation
 import retrofit2.http.*
 
 interface ApiService {
@@ -112,8 +111,5 @@ interface ApiService {
 
     @GET("hotkey/json")
     suspend fun getHotWords(): ApiResult<List<HotWord>>
-
-    @GET("friend/json")
-    suspend fun getFrequentlyWebsites(): ApiResult<List<Frequently>>
 
 }

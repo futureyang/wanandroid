@@ -1,4 +1,4 @@
-package com.future.wanandroid.util
+package com.future.wanandroid.common
 
 import android.content.Context
 import android.graphics.Bitmap

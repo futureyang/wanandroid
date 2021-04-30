@@ -3,9 +3,7 @@ package com.future.wanandroid.ui.main.mine
 import android.app.Activity
 import android.content.Intent
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
 import com.future.mvvmk.base.BaseVmFragment
-import com.future.toolkit.utils.log.LogUtils
 import com.future.wanandroid.R
 import com.future.wanandroid.bean.Article
 import com.future.wanandroid.common.bus.LiveBus
@@ -22,13 +20,10 @@ import com.future.wanandroid.ui.user.integral.IntegralActivity
 import com.future.wanandroid.ui.user.opensource.OpenSourceActivity
 import com.future.wanandroid.ui.user.ranking.RankingActivity
 import com.future.wanandroid.ui.user.share.list.ShareListActivity
-import com.future.wanandroid.util.GlideEngine
+import com.future.wanandroid.common.GlideEngine
 import com.luck.picture.lib.PictureSelector
 import com.luck.picture.lib.config.PictureConfig
 import com.luck.picture.lib.config.PictureMimeType
-import com.luck.picture.lib.config.PictureSelectionConfig
-import com.luck.picture.lib.engine.ImageEngine
-import com.luck.picture.lib.engine.PictureSelectorEngine
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_mine.*
 

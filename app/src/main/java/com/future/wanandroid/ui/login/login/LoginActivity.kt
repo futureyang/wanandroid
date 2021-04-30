@@ -26,6 +26,7 @@ class LoginActivity : BaseVmActivity<LoginViewModel, ActivityLoginBinding>() {
     override fun getLayoutId() = R.layout.activity_login
 
     override fun initView(savedInstanceState: Bundle?) {
+        mBinding.activity = this
         layout_login_password.apply {
             realRightView.findViewById<ImageView>(R.id.iv_template_item_right).apply {
                 setOnClickListener {

@@ -4,7 +4,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.future.wanandroid.R
 import com.future.wanandroid.bean.Article
-import com.xiaojianjun.wanandroid.model.bean.Navigation
+import com.future.wanandroid.bean.Navigation
 import kotlinx.android.synthetic.main.item_navigation.view.*
 
 
