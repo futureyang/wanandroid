@@ -14,7 +14,7 @@ import com.future.wanandroid.common.loadmore.LoadMoreStatus
 import com.future.wanandroid.databinding.ActivityShareListBinding
 import com.future.wanandroid.ui.ActivityManager
 import com.future.wanandroid.ui.details.DetailActivity
-import com.future.wanandroid.ui.main.adapter.ArticleAdapter
+import com.future.wanandroid.ui.main.adapter.SimpleArticleAdapter
 import com.future.wanandroid.ui.user.share.ShareActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,7 +29,7 @@ import kotlinx.android.synthetic.main.include_title.*
 @AndroidEntryPoint
 class ShareListActivity : BaseVmActivity<ShareListViewModel, ActivityShareListBinding>() {
 
-    lateinit var mAdapter : ArticleAdapter
+    lateinit var mAdapter : SimpleArticleAdapter
 
     private var position = 0
 
@@ -39,7 +39,7 @@ class ShareListActivity : BaseVmActivity<ShareListViewModel, ActivityShareListBi
 
     override fun initView(savedInstanceState: Bundle?) {
         mBinding.resId = R.color.textColorPrimary
-        mAdapter = ArticleAdapter().apply {
+        mAdapter = SimpleArticleAdapter().apply {
             setLoadMoreView(CommonLoadMoreView())
             bindToRecyclerView(mBinding.recyclerView)
             setOnItemClickListener { _, _, position ->
